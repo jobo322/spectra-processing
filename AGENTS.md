@@ -39,3 +39,17 @@ npm run prettier
 or simply `npm test`. Conventional commit messages only (`feat:`, `fix:`,
 `perf:`, `docs:`, `test:`, `chore:`, `refactor:`, `!` when breaking);
 `CHANGELOG.md` is generated, never edited.
+
+## Keeping the skill current
+
+The skill describes the code at the commit stored in
+`skills/spectra-processing-code-style/references/.checkpoint`. To refresh it
+without re-reading the whole repository:
+
+```console
+node skills/spectra-processing-code-style/scripts/style-delta.mjs
+```
+
+It writes `references/style-delta.md` with the commits, files, exported symbols,
+barrel/`package.json` diffs and style-risk lines since that checkpoint; fold
+those into the skill and commit the new checkpoint with it.

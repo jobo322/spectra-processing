@@ -56,17 +56,18 @@ empty/)`, with the same wording as the source message.
 
 ## Commands
 
-| command                                          | what it does                                            |
-| ------------------------------------------------ | ------------------------------------------------------- |
-| `npm ci`                                         | install from `package-lock.json`                        |
-| `npm run test-only`                              | `vitest run --coverage`                                 |
-| `npx vitest run src/x/__tests__/xMedian.test.ts` | one file                                                |
-| `npx vitest run -u src/__tests__`                | regenerate the API snapshot                             |
-| `npm run check-types`                            | `tsc --noEmit`                                          |
-| `npm run eslint` / `npm run eslint-fix`          | eslint over `.` (cached)                                |
-| `npm run prettier` / `npm run prettier-write`    | formatting check / write                                |
-| `npm test`                                       | test-only + types + eslint + prettier                   |
-| `node benchmark/xNumericLoops.ts`                | run one benchmark (arguments read from the file header) |
+| command                                                             | what it does                                                  |
+| ------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `npm ci`                                                            | install from `package-lock.json`                              |
+| `npm run test-only`                                                 | `vitest run --coverage`                                       |
+| `npx vitest run src/x/__tests__/xMedian.test.ts`                    | one file                                                      |
+| `npx vitest run -u src/__tests__`                                   | regenerate the API snapshot                                   |
+| `npm run check-types`                                               | `tsc --noEmit`                                                |
+| `npm run eslint` / `npm run eslint-fix`                             | eslint over `.` (cached)                                      |
+| `npm run prettier` / `npm run prettier-write`                       | formatting check / write                                      |
+| `npm test`                                                          | test-only + types + eslint + prettier                         |
+| `node benchmark/xNumericLoops.ts`                                   | run one benchmark (arguments read from the file header)       |
+| `node skills/spectra-processing-code-style/scripts/style-delta.mjs` | refresh the style skill from the changes since its checkpoint |
 
 Benchmarks are plain scripts run by hand with Node's type stripping (or Bun),
 they are type-checked but never part of `npm test`.
