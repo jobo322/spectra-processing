@@ -11,6 +11,11 @@ semantic-release changelog, six runtime dependencies in total. Read the rules
 below as the house style, and `references/function-anatomy.md` for the evidence
 taken function by function.
 
+The style below was extracted from `mljs/spectra-processing` at commit
+`c470879e4bc96450456e3192fd0fafc09d87ccf4` — the tip of `main` on 2026-11-23,
+package version 14.35.1. `references/.checkpoint` stores that commit, and §10
+explains how to refresh the skill from the changes made since then.
+
 ## 1. Naming
 
 - A public function is prefixed by the **category of its first argument**
@@ -249,6 +254,60 @@ test('should multiply only the requested range', () => {
   expect(Array.from(result)).toStrictEqual([1, 20, 30, 4]);
 });
 ```
+
+## 10. Keeping the skill current (delta mode)
+
+The skill does not have to be rebuilt by reading the whole repository again.
+`references/.checkpoint` records the commit the skill was extracted from (today
+`c470879e4bc96450456e3192fd0fafc09d87ccf4`, `main` tip of 2026-11-23, package
+version 14.35.1);
+`scripts/style-delta.mjs` summarises only what changed since then:
+
+```console
+node skills/spectra-processing-code-style/scripts/style-delta.mjs
+# writes references/style-delta.md and moves the checkpoint to HEAD
+node skills/spectra-processing-code-style/scripts/style-delta.mjs \
+  --from c470879e4bc96450456e3192fd0fafc09d87ccf4 --print
+node skills/spectra-processing-code-style/scripts/style-delta.mjs --no-checkpoint
+node skills/spectra-processing-code-style/scripts/style-delta.mjs --help
+```
+
+`--from` and `--to` accept **any revision git understands**: a commit SHA (full
+or abbreviated, as above), a branch, or a tag (`--from v14.35.1`, once the tags
+are fetched with `git fetch --tags`). An unknown revision fails loudly with
+`unknown revision: <ref> (expected a tag, a branch or a commit SHA)`.
+
+Every report records its provenance, so the commit the style was extracted from
+stays documented even after the checkpoint moves:
+
+```markdown
+# Style delta — c470879..460fb85
+
+- extracted from: `c470879e4bc96450456e3192fd0fafc09d87ccf4` (2026-09-11) chore: simplify code
+- compared with: `460fb85867ab48bf225e1cb58a3e24e7cc12a0ab` (2026-11-24) feat: refresh the style skill…
+```
+
+The report then contains the commits of the range with their conventional
+prefix, the watched files (`src/`, `benchmark/`, `eslint.config.js`,
+`.prettierrc.json`, `tsconfig*.json`, `vitest*`, `package.json`), the exported
+symbols added or removed per file, the barrel and `package.json` diffs, and a
+list of added lines that look like house-style risks (array helpers on numeric
+paths, `for...of` over typed arrays, `any`, `@ts-ignore`, bare `eslint-disable`,
+unseeded `Math.random`, `.at(-1)` without cast).
+
+Workflow for a refresh:
+
+1. Run the script.
+2. Read `references/style-delta.md` only — never the whole `src/` tree.
+3. Add one line per new function to `references/function-anatomy.md` when it
+   introduces a pattern that is not described yet; change `SKILL.md` only where
+   the delta contradicts it.
+4. `npm test`, then commit the refreshed skill together with the new
+   `references/.checkpoint` value.
+
+Because the checkpoint is a commit, a shallow clone or a clone that does not
+contain it fails loudly (`unknown revision`) instead of silently reading the
+wrong range; pass `--from <ref>` in that case.
 
 ## References
 
